@@ -203,12 +203,20 @@ public class Bridge {
       @Override
       public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
         String url = request.getUrl().toString();
-        return launchIntent(url);
+        if (url.contains(appUrl)) {
+          webView.loadUrl(url);
+          return true;
+        }
+        return false;
       }
 
       @Override
       public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        return launchIntent(url);
+        if (url.contains(appUrl)) {
+          webView.loadUrl(url);
+          return true;
+        }
+        return false;
       }
 
       private boolean launchIntent(String url) {
