@@ -328,6 +328,7 @@ public class Filesystem extends Plugin {
   public void rmdir(PluginCall call) {
     String path = call.getString("path");
     String directory = call.getString("directory");
+    boolean recursive = call.getBoolean("recursive", false);
 
     File fileObject = getFileObject(path, directory);
 
@@ -336,13 +337,25 @@ public class Filesystem extends Plugin {
       return;
     }
 
-    boolean deleted = fileObject.delete();
+    boolean deleted = recursive ? deleteRecursively(fileObject) : fileObject.delete();
 
     if(deleted == false) {
       call.error("Unable to delete directory, unknown reason");
     } else {
       call.success();
     }
+  }
+
+  boolean deleteRecursively(File fileOrDirectory) {
+    if (fileOrDirectory.isDirectory()) {
+      for (File child : fileOrDirectory.listFiles()) {
+        if (!deleteRecursively(child)) {
+          return false;
+        }
+      }
+    }
+
+    return fileOrDirectory.delete();
   }
 
   @PluginMethod()
