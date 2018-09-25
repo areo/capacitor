@@ -466,6 +466,13 @@ export interface FilesystemPlugin extends Plugin {
   appendFile(options: FileAppendOptions): Promise<FileAppendResult>;
 
   /**
+   * Copy a file to the specified location.
+   * @param options options for the file copy
+   * @return a promise that resolves with the copy result
+   */
+  copyFile(options: FileCopyOptions): Promise<FileCopyResult>;
+
+  /**
    * Delete a file from disk
    * @param options options for the file delete
    * @return a promise that resolves with the deleted file data result
@@ -578,6 +585,17 @@ export interface FileAppendOptions {
   encoding?: FilesystemEncoding;
 }
 
+export interface FileCopyOptions {
+  /**
+   * The file to copy
+   */
+  source: string;
+  /**
+   * The file path destination
+   */
+  target: string;
+}
+
 export interface FileReadOptions {
   /**
    * the filename to read
@@ -678,6 +696,8 @@ export interface FileDeleteResult {
 export interface FileWriteResult {
 }
 export interface FileAppendResult {
+}
+export interface FileCopyResult {
 }
 export interface MkdirResult {
 }

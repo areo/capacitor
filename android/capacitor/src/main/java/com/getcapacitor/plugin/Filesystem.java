@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.RequiresApi;
 import android.util.Base64;
 import android.util.Log;
 import com.getcapacitor.JSArray;
@@ -29,6 +31,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @NativePlugin(requestCodes = {
   PluginRequestCodes.FILESYSTEM_REQUEST_WRITE_PERMISSIONS
@@ -276,6 +281,20 @@ public class Filesystem extends Plugin {
     } catch(JSONException ex) {}
 
     this.writeFile(call);
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.O)
+  @PluginMethod()
+  public void copyFile(PluginCall call) {
+    String source = call.getString("source");
+    String target = call.getString("target");
+
+    try {
+      Files.copy(Paths.get(source), Paths.get(target));
+      call.success();
+    } catch (IOException ex) {
+      call.error("Unable to copy file", ex);
+    }
   }
 
   @PluginMethod()
