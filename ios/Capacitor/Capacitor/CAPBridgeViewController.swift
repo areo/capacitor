@@ -175,7 +175,7 @@ public class CAPBridgeViewController: UIViewController, CAPBridgeDelegate, WKScr
   public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
     let navUrl = navigationAction.request.url!
     if let scheme = navUrl.scheme {
-      let validSchemes = ["tel", "mailto", "facetime", "sms", "maps", "itms-services", "http", "https"]
+      let validSchemes = ["tel", "mailto", "facetime", "sms", "maps", "itms-services", "http"]
       if validSchemes.contains(scheme) && navUrl.absoluteString.range(of: hostname!) == nil && (navigationAction.targetFrame == nil || (navigationAction.targetFrame?.isMainFrame)!) {
         UIApplication.shared.open(navUrl, options: [:], completionHandler: nil)
         decisionHandler(.cancel)
@@ -410,4 +410,3 @@ public class CAPBridgeViewController: UIViewController, CAPBridgeDelegate, WKScr
    */
   
 }
-
